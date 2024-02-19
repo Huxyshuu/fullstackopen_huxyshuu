@@ -9,6 +9,9 @@ The file structure will as follows:
  │ ├─ 📂 0.5-Single_page_app_diagram
  │ └─ 📂 0.6-New_note_in_Single_page_app_diagram
  ├─ 📂 part1
+ │ ├─ 📂 1.1
+ │ ├─ ...
+ │ └─ 📂 1.14
  ├─ 📂 part2
  ├─ 📂 part3
  ├─ 📂 part4
