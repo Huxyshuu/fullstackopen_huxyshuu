@@ -1,6 +1,6 @@
 # Journey through the Fullstackopen course
 
-The file structure will as follows:
+The file structure will be as follows:
 ```
 📦 fullstackopen_huxyshuu
  ├─ 📂 part0
