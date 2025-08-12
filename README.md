@@ -18,9 +18,6 @@ The file structure will be as follows:
 ...
 ```
 
-### Status
-![Status](https://i.imgur.com/tMgoA7e.png)
-
 ```mermaid
 %%{
     init: {
@@ -38,7 +35,7 @@ The file structure will be as follows:
   }}%%
 pie showData
     title Percentage of exercises completed
-    "Completed" : 6
+    "Completed" : 20
     "Incomplete" : 287
 ```
 
