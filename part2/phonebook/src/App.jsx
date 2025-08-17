@@ -3,6 +3,7 @@ import SearchBar from '../components/searchBar.jsx'
 import PersonForm from '../components/personForm.jsx'
 import Persons from '../components/persons.jsx'
 import personService from '../services/persons/personService.js'
+import Notification from '../components/Notification.jsx'
 import axios from 'axios'
 
 const App = () => {
@@ -12,6 +13,9 @@ const App = () => {
 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [errorNotification, setErrorNotification] = useState(false)
 
   const handleNameChange = (e) => {
     setNewName(e.target.value);
@@ -38,9 +42,24 @@ const App = () => {
           console.log(returnedPerson)
           setPersons(persons.map(p => p.id === person.id ? returnedPerson.data : p));
           setSearchResults(searchResults.map(p => p.id === person.id ? returnedPerson .data: p));
+
+          setErrorNotification(false);
+          setNotificationMessage(`Updated ${returnedPerson.data.name}'s number`);
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 5000);
         })
         .catch(error => {
-          console.error('Error updating person:', error);
+          if (error.response && error.response.status === 404) {
+            setNotificationMessage(`Information of ${person.name} has already been removed from server`);
+          } else {
+            setNotificationMessage(`Error updating person: ${error.message}`);
+          }
+          
+          setErrorNotification(true);
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 5000);
         });
       }
     } else {
@@ -50,9 +69,19 @@ const App = () => {
           const responsePerson = response.data;
           setPersons(persons.concat(responsePerson));
           setSearchResults(searchResults.concat(responsePerson));
+
+          setErrorNotification(false);
+          setNotificationMessage(`Added ${response.data.name}`);
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 5000);
         })
         .catch(error => {
-          console.error('Error creating person:', error);
+          setNotificationMessage(`Error creating person: ${error.message}`);
+          setErrorNotification(true);
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 5000);
         });
     }
   }
@@ -64,9 +93,24 @@ const App = () => {
       .then(() => {
         setPersons(persons.filter(p => p.id !== id));
         setSearchResults(searchResults.filter(p => p.id !== id));
+
+        setErrorNotification(false);
+        setNotificationMessage(`Deleted ${person.name}`);
+        setTimeout(() => {
+          setNotificationMessage(null);
+        }, 5000);
       })
       .catch(error => {
-        console.error('Error deleting person:', error);
+        if (error.response && error.response.status === 404) {
+            setNotificationMessage(`Information of ${person.name} has already been removed from server`);
+          } else {
+            setNotificationMessage(`Error deleting person: ${error.message}`);
+          }
+          
+          setErrorNotification(true);
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 5000);
       });
     }
   }
@@ -83,6 +127,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} isError={errorNotification}/>
       <SearchBar persons={persons} setSearchResults={setSearchResults}/>
       <h3>add a new</h3>
       <PersonForm handleSubmit={handleSubmit} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange}/>
